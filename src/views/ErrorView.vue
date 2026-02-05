@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col">
         <h3> Midagi läks valesti :(</h3>
-        <img src="@/assets/illustrations/source.gif" alt="Cat illustration">
+        <img class="error-gif" src="@/assets/illustrations/source.gif" alt="Cat illustration">
       </div>
     </div>
   </div>
@@ -14,6 +14,13 @@
 <script>
 export default {
   name: 'ErrorView',
-  props: {}
 }
 </script>
+
+<style scoped>
+.error-gif {
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+}
+</style>
