@@ -7,18 +7,23 @@
           <img class="login-cat" src="@/assets/illustrations/cat3.jpeg" alt="Cat illustration">
         </div>
 
+        <AlertError :alert-error-message="alertErrorMessage" @event-alert-box-closed="resetAlertMessage"/>
+
         <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="username" placeholder="Kasutajanimi">
+          <input v-model="loginRequest.username" type="text" class="form-control" id="username"
+                 placeholder="Kasutajanimi">
           <label for="username">Kasutajanimi</label>
         </div>
 
         <div class="form-floating mb-3">
-          <input type="password" class="form-control" id="password" placeholder="Parool">
+          <input v-model="loginRequest.password" type="password" class="form-control" id="password"
+                 placeholder="Parool">
           <label for="password">Parool</label>
         </div>
 
         <div class="d-grid gap-2">
-          <button  type="button" class="btn btn-secondary">
+          <button @click="processLogin" type="button" class="btn btn-secondary" :disabled="isFetchingData">
+            <span v-if="isFetchingData" class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
             Logi sisse
           </button>
         </div>
@@ -33,27 +38,67 @@
 </template>
 
 <script>
+import LoginService from "@/services/LoginService";
+import AlertError from "@/components/AlertError.vue";
+
 export default {
   name: 'LoginView',
+  components: {AlertError},
   data() {
     return {
 
-      loginRequest:{
-        username:'',
-        password:'',
+      isFetchingData: false,
+      alertErrorMessage: '',
+
+      loginRequest: {
+        username: '',
+        password: '',
       },
 
-      loginResponse:{
+      loginResponse: {
         userId: 0,
         userRole: '',
-        token:'',
+        token: '',
+      },
+
+      errorResponse: {
+        message: '',
+        errorCode: 0
       }
+
     }
   },
 
   methods: {
 
+    processLogin() {
+      if (this.loginRequest.username !== '' && this.loginRequest.password !== '') {
+        this.executeLogin();
+      } else {
+        this.alertErrorMessage = 'Täida kõik väljad'
+      }
+    },
 
+    executeLogin() {
+      this.isFetchingData = true
+      LoginService.sendPostLoginRequest(this.loginRequest.username, this.loginRequest.password)
+          .then(response => this.handleLoginResponse(response))
+          .catch()
+          .finally()
+    },
+
+    handleLoginResponse(response) {
+      this.loginResponse = response.data;
+      sessionStorage.setItem('userId', this.loginResponse.userId)
+      sessionStorage.setItem('userRole', this.loginResponse.userRole)
+      sessionStorage.setItem('token', this.loginResponse.token)
+      this.$emit('event-user-logged-in')
+
+    },
+
+    resetAlertMessage() {
+      this.alertErrorMessage = ''
+    },
 
   },
   mounted() {

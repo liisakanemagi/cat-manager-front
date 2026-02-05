@@ -11,7 +11,7 @@
       Logi sisse / registreeri
     </button>
   </nav>
-  <router-view />
+  <router-view @event-user-logged-in ="updateNavMenu" />
 </template>
 <script>
 import navigationService from "@/services/NavigationService";
@@ -26,6 +26,10 @@ export default {
   },
 
   methods: {
+
+    updateNavMenu(){
+      //sessionstorageservice fail teha
+    },
 
     navigateToLoginView(){
       navigationService.navigateToLoginView()
