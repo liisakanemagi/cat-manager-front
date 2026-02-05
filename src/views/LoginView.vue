@@ -36,9 +36,26 @@
 export default {
   name: 'LoginView',
   data() {
-    return {}
+    return {
+
+      loginRequest:{
+        username:'',
+        password:'',
+      },
+
+      loginResponse:{
+        userId: 0,
+        userRole: '',
+        token:'',
+      }
+    }
   },
-  methods: {},
+
+  methods: {
+
+
+
+  },
   mounted() {
   }
 }
