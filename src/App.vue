@@ -1,5 +1,5 @@
 <template>
-  <nav class="d-flex gap-2 justify-content-start m-5">
+  <nav class="d-flex gap-2 justify-content-center">
     <router-link to="/">Home</router-link>
     <router-link v-if="isLoggedIn">Lisa kiisu</router-link>
 

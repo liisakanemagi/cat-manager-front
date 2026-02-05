@@ -1,7 +1,11 @@
 <template>
-  <div class="container text-center mt-5">
+  <div class="container text-center mt-4">
     <div class="row justify-content-center">
       <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+
+        <div class="home">
+          <img class="login-cat" src="@/assets/illustrations/cat3.jpeg" alt="Cat illustration">
+        </div>
 
         <div class="form-floating mb-3">
           <input type="text" class="form-control" id="username" placeholder="Kasutajanimi">
@@ -39,3 +43,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.login-cat {
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+}
+</style>

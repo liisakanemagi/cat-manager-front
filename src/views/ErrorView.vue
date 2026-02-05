@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col">
         <h3> Midagi läks valesti :(</h3>
-        <img class="error-gif" src="@/assets/illustrations/source.gif" alt="Cat illustration">
+        <img class="error-gif" src="@/assets/illustrations/error.gif" alt="Cat illustration">
       </div>
     </div>
   </div>
