@@ -18,7 +18,7 @@
         </div>
 
         <div class="d-grid gap-2">
-          <button type="button" class="btn btn-secondary">
+          <button  type="button" class="btn btn-secondary">
             Logi sisse
           </button>
         </div>
