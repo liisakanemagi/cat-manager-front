@@ -29,7 +29,7 @@
           </div>
 
           <button class="btn btn-secondary" :disabled="isPostingData">
-            <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+            <span v-if="isPostingData" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
             Registreeri
           </button>
 
@@ -43,9 +43,27 @@
 export default {
   name: 'RegisterView',
   data() {
-    return {}
+    return {
+      isPostingData: false,
+
+      userInfo: {
+        username: '',
+        password: '',
+        email: ''
+      },
+
+      errorResponse: {
+        message: '',
+        errorCode: 0
+      }
+    }
   },
-  methods: {},
+
+  methods: {
+
+
+
+  },
   mounted() {
   }
 }
