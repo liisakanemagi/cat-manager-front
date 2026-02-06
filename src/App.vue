@@ -15,6 +15,7 @@
 </template>
 <script>
 import navigationService from "@/services/NavigationService";
+import SessionStorageService from "@/services/SessionStorageService";
 
 export default {
   name: 'App',
@@ -28,7 +29,8 @@ export default {
   methods: {
 
     updateNavMenu(){
-      //sessionstorageservice fail teha
+      this.isLoggedIn = SessionStorageService.isLoggedIn()
+      this.isAdmin = SessionStorageService.isAdmin()
     },
 
     navigateToLoginView(){
