@@ -29,7 +29,7 @@
         </div>
 
         <div class="mt-3">
-          <button type="button" class="btn btn-link">Registreeri</button>
+          <button @click="navigateToRegisterView" type="button" class="btn btn-link">Registreeri</button>
         </div>
       </div>
     </div>
@@ -40,6 +40,7 @@
 <script>
 import LoginService from "@/services/LoginService";
 import AlertError from "@/components/AlertError.vue";
+import NavigationService from "@/services/NavigationService";
 
 export default {
   name: 'LoginView',
@@ -83,8 +84,8 @@ export default {
       this.isFetchingData = true
       LoginService.sendPostLoginRequest(this.loginRequest.username, this.loginRequest.password)
           .then(response => this.handleLoginResponse(response))
-          .catch()
-          .finally()
+          .catch(error => this.handleLoginError(error))
+          .finally(() => this.isFetchingData = false)
     },
 
     handleLoginResponse(response) {
@@ -93,7 +94,16 @@ export default {
       sessionStorage.setItem('userRole', this.loginResponse.userRole)
       sessionStorage.setItem('token', this.loginResponse.token)
       this.$emit('event-user-logged-in')
+      NavigationService.navigateToHomeView()
+    },
 
+    handleLoginError(error){
+      this.errorResponse = error.response.data
+      if(error.response.data === 403 && this.errorResponse.errorCode === 111){
+        this.alertErrorMessage = this.errorResponse.message
+      } else {
+        NavigationService.navigateToErrorView()
+      }
     },
 
     resetAlertMessage() {
