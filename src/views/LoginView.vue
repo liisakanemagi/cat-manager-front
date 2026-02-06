@@ -1,7 +1,7 @@
 <template>
   <div class="container text-center mt-3">
     <div class="row justify-content-center">
-      <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+      <div class="col-12 col-sm-8 col-md-6 col-lg-4 d-flex flex-column gap-2">
 
         <div class="home">
           <img class="login-cat" src="@/assets/illustrations/cat3.jpeg" alt="Cat illustration">
@@ -9,15 +9,15 @@
 
         <AlertError :alert-error-message="alertErrorMessage" @event-alert-box-closed="resetAlertMessage"/>
 
-        <div class="form-floating mb-3">
+        <div class="form-floating">
           <input v-model="loginRequest.username" type="text" class="form-control" id="username"
                  placeholder="Kasutajanimi">
           <label for="username">Kasutajanimi</label>
         </div>
 
-        <div class="form-floating mb-3">
+        <div class="form-floating">
           <input v-model="loginRequest.password" type="password" class="form-control" id="password"
-                 placeholder="Parool">
+                 placeholder="Parool" >
           <label for="password">Parool</label>
         </div>
 
@@ -28,7 +28,7 @@
           </button>
         </div>
 
-        <div class="mt-3">
+        <div>
           <button @click="navigateToRegisterView" type="button" class="btn btn-link">Registreeri</button>
         </div>
       </div>
@@ -136,7 +136,7 @@ export default {
 
 <style scoped>
 .login-cat {
-  max-width: 400px;
+  max-width: 300px;
   width: 100%;
   height: auto;
 }
