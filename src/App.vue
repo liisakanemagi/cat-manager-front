@@ -3,7 +3,7 @@
     <router-link to="/">Home</router-link>
     <router-link v-if="isLoggedIn">Lisa kiisu</router-link>
 
-    <button v-if="isLoggedIn" type="button" class="btn btn-secondary btn-sm ms-3">
+    <button v-if="isLoggedIn" @click="logOut" type="button" class="btn btn-secondary btn-sm ms-3">
       Logi välja
     </button>
 
@@ -28,6 +28,12 @@ export default {
   },
 
   methods: {
+
+    logOut() {
+      sessionStorage.clear()
+      this.updateNavMenu()
+      navigationService.navigateToHomeView()
+    },
 
     updateNavMenu() {
       this.isLoggedIn = SessionStorageService.isLoggedIn()

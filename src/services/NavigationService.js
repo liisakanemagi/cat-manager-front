@@ -13,6 +13,10 @@ export default {
 
     navigateToErrorView(){
         router.push({name:'errorRoute'})
+    },
+
+    navigateToRegisterView() {
+        router.push(({name:'registerRoute'}))
     }
 
 }

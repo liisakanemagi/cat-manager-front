@@ -73,11 +73,15 @@ export default {
   methods: {
 
     processLogin() {
-      if (this.loginRequest.username !== '' && this.loginRequest.password !== '') {
+      if (this.allFieldsHaveCorrectInput()) {
         this.executeLogin();
       } else {
-        this.alertErrorMessage = 'Täida kõik väljad'
+        this.displayIncorrectInputAlert();
       }
+    },
+
+    allFieldsHaveCorrectInput() {
+      return this.loginRequest.username !== '' && this.loginRequest.password !== '';
     },
 
     executeLogin() {
@@ -88,22 +92,27 @@ export default {
           .finally(() => this.isFetchingData = false)
     },
 
-    handleLoginResponse(response) {
+     handleLoginResponse(response) {
       this.loginResponse = response.data;
+      this.setSessionStorageItems();
+      this.updateNavMenuUserIsLoggedIn();
+      NavigationService.navigateToHomeView()
+    },
+
+    setSessionStorageItems() {
       sessionStorage.setItem('userId', this.loginResponse.userId)
       sessionStorage.setItem('userRole', this.loginResponse.userRole)
       sessionStorage.setItem('token', this.loginResponse.token)
+    },
+
+    updateNavMenuUserIsLoggedIn() {
       this.$emit('event-user-logged-in')
-      NavigationService.navigateToHomeView()
     },
 
     handleLoginError(error) {
       if (error.response && error.response.data) {
         this.errorResponse = error.response.data
-        if (
-            error.response.status === 403 &&
-            this.errorResponse.errorCode === 111
-        ) {
+        if (this.incorrectCredentialsInput(error)) {
           this.alertErrorMessage = this.errorResponse.message
         } else {
           NavigationService.navigateToErrorView()
@@ -111,6 +120,17 @@ export default {
       }
     },
 
+    incorrectCredentialsInput(error) {
+      return error.response.status === 403 && this.errorResponse.errorCode === 111;
+    },
+
+    displayIncorrectInputAlert() {
+      this.alertErrorMessage = 'Täida kõik väljad'
+    },
+
+    navigateToRegisterView() {
+      NavigationService.navigateToRegisterView()
+    },
 
     resetAlertMessage() {
       this.alertErrorMessage = ''
