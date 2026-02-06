@@ -11,7 +11,7 @@
       Logi sisse / registreeri
     </button>
   </nav>
-  <router-view @event-user-logged-in ="updateNavMenu" />
+  <router-view @event-user-logged-in="updateNavMenu"/>
 </template>
 <script>
 import navigationService from "@/services/NavigationService";
@@ -19,6 +19,7 @@ import SessionStorageService from "@/services/SessionStorageService";
 
 export default {
   name: 'App',
+
   data() {
     return {
       isLoggedIn: false,
@@ -28,14 +29,18 @@ export default {
 
   methods: {
 
-    updateNavMenu(){
+    updateNavMenu() {
       this.isLoggedIn = SessionStorageService.isLoggedIn()
       this.isAdmin = SessionStorageService.isAdmin()
     },
 
-    navigateToLoginView(){
+    navigateToLoginView() {
       navigationService.navigateToLoginView()
-    }
+    },
+  },
+
+  mounted() {
+    this.updateNavMenu()
   }
 }
 </script>
