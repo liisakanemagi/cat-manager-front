@@ -41,6 +41,7 @@
 import LoginService from "@/services/LoginService";
 import AlertError from "@/components/AlertError.vue";
 import NavigationService from "@/services/NavigationService";
+import {INVALID_CREDENTIALS_ERROR} from "@/constants/ErrorCodes";
 
 export default {
   name: 'LoginView',
@@ -114,7 +115,7 @@ export default {
     },
 
     incorrectCredentialsInput(error) {
-      return error.response.status === 403 && this.errorResponse.errorCode === 111;
+      return error.response.status === 403 && this.errorResponse.errorCode === INVALID_CREDENTIALS_ERROR;
     },
 
     navigateToRegisterView() {

@@ -1,0 +1,3 @@
+export const
+
+    INVALID_CREDENTIALS_ERROR = 111;
