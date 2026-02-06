@@ -85,11 +85,15 @@ export default {
     },
 
     executeLogin() {
-      this.isFetchingData = true
+      this.startSpinner();
       LoginService.sendPostLoginRequest(this.loginRequest.username, this.loginRequest.password)
           .then(response => this.handleLoginResponse(response))
           .catch(error => this.handleLoginError(error))
           .finally(() => this.isFetchingData = false)
+    },
+
+    startSpinner() {
+      this.isFetchingData = true
     },
 
      handleLoginResponse(response) {
@@ -136,8 +140,6 @@ export default {
       this.alertErrorMessage = ''
     },
 
-  },
-  mounted() {
   }
 }
 </script>
