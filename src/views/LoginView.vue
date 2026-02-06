@@ -22,7 +22,7 @@
         </div>
 
         <div class="d-grid gap-2">
-          <button @click="processLogin" type="button" class="btn btn-secondary" :disabled="isFetchingData || !areRequiredFieldsFilled()">
+          <button @click="executeLogin" type="button" class="btn btn-secondary" :disabled="isFetchingData || !areRequiredFieldsFilled()">
             <span v-if="isFetchingData" class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
             Logi sisse
           </button>
@@ -72,18 +72,6 @@ export default {
 
   methods: {
 
-    processLogin() {
-      if (this.areRequiredFieldsFilled()) {
-        this.executeLogin();
-      } else {
-        this.displayIncorrectInputAlert();
-      }
-    },
-
-    areRequiredFieldsFilled() {
-      return this.loginRequest.username !== '' && this.loginRequest.password !== '';
-    },
-
     async executeLogin() {
       this.isFetchingData = true;
       try {
@@ -129,12 +117,12 @@ export default {
       return error.response.status === 403 && this.errorResponse.errorCode === 111;
     },
 
-    displayIncorrectInputAlert() {
-      this.alertErrorMessage = 'Täida kõik väljad'
-    },
-
     navigateToRegisterView() {
       NavigationService.navigateToRegisterView()
+    },
+
+    areRequiredFieldsFilled() {
+      return this.loginRequest.username !== '' && this.loginRequest.password !== '';
     },
 
     resetAlertMessage() {
