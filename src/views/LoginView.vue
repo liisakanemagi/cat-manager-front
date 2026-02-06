@@ -97,14 +97,20 @@ export default {
       NavigationService.navigateToHomeView()
     },
 
-    handleLoginError(error){
-      this.errorResponse = error.response.data
-      if(error.response.data === 403 && this.errorResponse.errorCode === 111){
-        this.alertErrorMessage = this.errorResponse.message
-      } else {
-        NavigationService.navigateToErrorView()
+    handleLoginError(error) {
+      if (error.response && error.response.data) {
+        this.errorResponse = error.response.data
+        if (
+            error.response.status === 403 &&
+            this.errorResponse.errorCode === 111
+        ) {
+          this.alertErrorMessage = this.errorResponse.message
+        } else {
+          NavigationService.navigateToErrorView()
+        }
       }
     },
+
 
     resetAlertMessage() {
       this.alertErrorMessage = ''

@@ -4,7 +4,7 @@ export default {
 
     sendPostLoginRequest(username, password) {
 
-        return axios.get('/login', {
+        return axios.post('/login', {
                 username: username,
                 password: password
         })
