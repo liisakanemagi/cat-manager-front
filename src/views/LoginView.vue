@@ -22,7 +22,7 @@
         </div>
 
         <div class="d-grid gap-2">
-          <button @click="processLogin" type="button" class="btn btn-secondary" :disabled="isFetchingData">
+          <button @click="processLogin" type="button" class="btn btn-secondary" :disabled="isFetchingData || !areRequiredFieldsFilled()">
             <span v-if="isFetchingData" class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
             Logi sisse
           </button>
@@ -73,30 +73,31 @@ export default {
   methods: {
 
     processLogin() {
-      if (this.allFieldsHaveCorrectInput()) {
+      if (this.areRequiredFieldsFilled()) {
         this.executeLogin();
       } else {
         this.displayIncorrectInputAlert();
       }
     },
 
-    allFieldsHaveCorrectInput() {
+    areRequiredFieldsFilled() {
       return this.loginRequest.username !== '' && this.loginRequest.password !== '';
     },
 
-    executeLogin() {
-      this.startSpinner();
-      LoginService.sendPostLoginRequest(this.loginRequest.username, this.loginRequest.password)
-          .then(response => this.handleLoginResponse(response))
-          .catch(error => this.handleLoginError(error))
-          .finally(() => this.isFetchingData = false)
+    async executeLogin() {
+      this.isFetchingData = true;
+      try {
+        const response = await LoginService.sendPostLoginRequest( this.loginRequest.username, this.loginRequest.password);
+        this.handleLoginResponse(response);
+      } catch (error) {
+        this.handleLoginError(error);
+      } finally {
+        this.isFetchingData = false;
+      }
     },
 
-    startSpinner() {
-      this.isFetchingData = true
-    },
 
-     handleLoginResponse(response) {
+    handleLoginResponse(response) {
       this.loginResponse = response.data;
       this.setSessionStorageItems();
       this.updateNavMenuUserIsLoggedIn();
