@@ -92,7 +92,7 @@ import RegisterService from "@/services/RegisterService";
 import AlertSuccess from "@/components/AlertSuccess.vue";
 import NavigationService from "@/services/NavigationService";
 import navigationService from "@/services/NavigationService";
-import {USERNAME_ALREADY_EXISTS} from "@/constants/ErrorCodes";
+import {EMAIL_ALREADY_EXISTS, USERNAME_ALREADY_EXISTS} from "@/constants/ErrorCodes";
 
 export default {
   name: 'RegisterView',
@@ -156,7 +156,7 @@ export default {
       try {
         await RegisterService.sendPostRegisterRequest(this.userInfo)
         this.handleRegisterResponse()
-      } catch(error) {
+      } catch (error) {
         this.handleRegisterError(error)
       } finally {
         this.isPostingData = false
@@ -174,13 +174,19 @@ export default {
       this.errorResponse = error.response.data
       if (this.userAlreadyExists(error)) {
         this.alertErrorMessage = this.errorResponse.message
+      } else if(this.emailAlreadyExists(error)) {
+        this.alertErrorMessage = this.errorResponse.message
       } else {
         navigationService.navigateToErrorView()
       }
     },
 
     userAlreadyExists(error) {
-      return error.response.status === 403 && this.errorResponse.errorCode === USERNAME_ALREADY_EXISTS;
+      return error.response.status === 403 && this.errorResponse.errorCode === USERNAME_ALREADY_EXISTS
+    },
+
+    emailAlreadyExists(error) {
+      return error.response.status === 403 && this.errorResponse.errorCode === EMAIL_ALREADY_EXISTS
     },
 
     resetAlertMessages() {
@@ -191,8 +197,6 @@ export default {
     allFieldsHaveInput() {
       return this.userInfo.username !== '' && this.userInfo.password !== '' && this.userInfo.email !== '' && this.passwordRetype !== '';
     },
-
-
 
     displayEmailIsNotValidAlert() {
       this.alertErrorMessage = 'Palun sisesta toimiv e-mail'
@@ -205,7 +209,6 @@ export default {
     displayPasswordsNotMatchingAlert() {
       this.alertErrorMessage = 'Sisestatud paroolid ei kattu'
     },
-
 
 
   },
