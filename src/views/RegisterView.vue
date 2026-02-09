@@ -68,7 +68,7 @@
             <button
                 type="submit"
                 class="btn btn-secondary"
-                :disabled="isPostingData"
+                :disabled="isPostingData || !allFieldsHaveInput()"
             >
               <span
                   v-if="isPostingData"
@@ -121,19 +121,13 @@ export default {
   methods: {
 
     processRegister() {
-      if (!this.allFieldsHaveInput()) {
-        this.displaySomeFieldsAreEmptyAlert();
-      } else if (!this.isValidEmail(this.userInfo.email)) {
+      if (!this.isValidEmail(this.userInfo.email)) {
         this.displayEmailIsNotValidAlert();
       } else if (!this.passwordsAreMatching()) {
         this.displayPasswordsNotMatchingAlert();
       } else {
         this.executeRegister()
       }
-    },
-
-    allFieldsHaveInput() {
-      return this.userInfo.username !== '' && this.userInfo.password !== '' && this.userInfo.email !== '' && this.passwordRetype !== '';
     },
 
     passwordsAreMatching() {
@@ -144,7 +138,7 @@ export default {
       return String(email)
           .toLowerCase()
           .match(
-              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
           );
     },
 
@@ -153,7 +147,7 @@ export default {
       try {
         await RegisterService.sendPostRegisterRequest(this.userInfo)
         this.handleRegisterResponse()
-      } catch {
+      } catch(error) {
         this.handleRegisterError(error)
       } finally {
         this.isPostingData = false
@@ -185,8 +179,8 @@ export default {
       this.alertSuccessMessage = ''
     },
 
-    displaySomeFieldsAreEmptyAlert() {
-      this.alertErrorMessage = 'Täida kõik väljad'
+    allFieldsHaveInput() {
+      return this.userInfo.username !== '' && this.userInfo.password !== '' && this.userInfo.email !== '' && this.passwordRetype !== '';
     },
 
     displayPasswordsNotMatchingAlert() {

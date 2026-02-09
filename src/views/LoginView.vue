@@ -43,7 +43,7 @@
             <button
                 type="submit"
                 class="btn btn-secondary"
-                :disabled="isFetchingData || !areRequiredFieldsFilled()"
+                :disabled="isFetchingData || !allFieldsHaveInput()"
             >
               <span
                   v-if="isFetchingData"
@@ -155,7 +155,7 @@ export default {
       NavigationService.navigateToRegisterView()
     },
 
-    areRequiredFieldsFilled() {
+    allFieldsHaveInput() {
       return this.loginRequest.username !== '' && this.loginRequest.password !== '';
     },
 
