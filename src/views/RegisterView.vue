@@ -7,9 +7,6 @@
             :alert-error-message='alertErrorMessage'
             @event-alert-box-closed='resetAlertMessages'
         />
-        <AlertSuccess
-            :alert-success-message='alertSuccessMessage'
-            @event-alert-box-closed='resetAlertMessages'/>
 
         <div class="home">
           <img
@@ -19,8 +16,13 @@
           >
         </div>
 
-        <form @submit.prevent="processRegister" novalidate>
-          <div v-if="displayAllFields" class="form-floating">
+        <AlertSuccess
+            :alert-success-message='alertSuccessMessage'
+            @event-alert-box-closed='resetAlertMessages'
+        />
+
+        <form v-if="displayAllFields" @submit.prevent="processRegister" novalidate>
+          <div class="form-floating">
             <input
                 v-model="userInfo.username"
                 type="text"
