@@ -8,7 +8,8 @@
             @event-alert-box-closed='resetAlertMessages'
         />
         <AlertSuccess
-            :alert-success-message='alertSuccessMessage'/>
+            :alert-success-message='alertSuccessMessage'
+            @event-alert-box-closed='resetAlertMessages'/>
 
         <div class="home">
           <img
@@ -120,21 +121,37 @@ export default {
   methods: {
 
     processRegister() {
-      if (this.userInfo.username === '' && this.userInfo.password === '' && this.userInfo.email === '' && this.passwordRetype === '') {
-        this.alertErrorMessage = 'Täida kõik väljad'
-      } else if (this.userInfo.password !== this.passwordRetype) {
-        this.alertErrorMessage = 'Sisestatud paroolid ei kattu'
+      if (!this.allFieldsHaveInput()) {
+        this.displaySomeFieldsAreEmptyAlert();
       } else if (!this.isValidEmail(this.userInfo.email)) {
-        this.alertErrorMessage = 'Palun sisesta korrektne e-mail'
+        this.displayEmailIsNotValidAlert();
+      } else if (!this.passwordsAreMatching()) {
+        this.displayPasswordsNotMatchingAlert();
       } else {
         this.executeRegister()
       }
     },
 
+    allFieldsHaveInput() {
+      return this.userInfo.username !== '' && this.userInfo.password !== '' && this.userInfo.email !== '' && this.passwordRetype !== '';
+    },
+
+    passwordsAreMatching() {
+      return this.userInfo.password === this.passwordRetype;
+    },
+
+    isValidEmail(email) {
+      return String(email)
+          .toLowerCase()
+          .match(
+              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          );
+    },
+
     async executeRegister() {
       this.isPostingData = true
       try {
-        const response = await RegisterService.sendPostRegisterRequest(this.userInfo)
+        await RegisterService.sendPostRegisterRequest(this.userInfo)
         this.handleRegisterResponse()
       } catch {
         this.handleRegisterError(error)
@@ -152,25 +169,33 @@ export default {
 
     handleRegisterError(error) {
       this.errorResponse = error.response.data
-      if (error.response.status === 403 && this.errorResponse.errorCode === USERNAME_ALREADY_EXISTS) {
+      if (this.userAlreadyExists(error)) {
         this.alertErrorMessage = this.errorResponse.message
       } else {
         navigationService.navigateToErrorView()
       }
     },
 
-    isValidEmail(email) {
-      return String(email)
-          .toLowerCase()
-          .match(
-              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          );
+    userAlreadyExists(error) {
+      return error.response.status === 403 && this.errorResponse.errorCode === USERNAME_ALREADY_EXISTS;
     },
 
     resetAlertMessages() {
       this.alertErrorMessage = ''
       this.alertSuccessMessage = ''
-    }
+    },
+
+    displaySomeFieldsAreEmptyAlert() {
+      this.alertErrorMessage = 'Täida kõik väljad'
+    },
+
+    displayPasswordsNotMatchingAlert() {
+      this.alertErrorMessage = 'Sisestatud paroolid ei kattu'
+    },
+
+    displayEmailIsNotValidAlert() {
+      this.alertErrorMessage = 'Palun sisesta toimiv e-mail'
+    },
 
   },
 
