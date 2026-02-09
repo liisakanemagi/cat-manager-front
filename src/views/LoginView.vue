@@ -4,37 +4,70 @@
       <div class="col-12 col-sm-8 col-md-6 col-lg-4 d-flex flex-column gap-2">
 
         <div class="home">
-          <img class="login-cat" src="@/assets/illustrations/cat3.jpeg" alt="Cat illustration">
+          <img
+              class="login-cat"
+              src="@/assets/illustrations/cat3.jpeg"
+              alt="Cat illustration"
+          >
         </div>
 
-        <AlertError :alert-error-message="alertErrorMessage" @event-alert-box-closed="resetAlertMessage"/>
+        <AlertError
+            :alert-error-message="alertErrorMessage"
+            @event-alert-box-closed="resetAlertMessage"
+        />
 
-        <div class="form-floating">
-          <input v-model="loginRequest.username" type="text" class="form-control" id="username"
-                 placeholder="Kasutajanimi">
-          <label for="username">Kasutajanimi</label>
-        </div>
+        <form @submit.prevent="executeLogin" novalidate>
+          <div class="form-floating">
+            <input
+                v-model="loginRequest.username"
+                type="text"
+                class="form-control"
+                placeholder="Kasutajanimi"
+                required
+            >
+            <label>Kasutajanimi</label>
+          </div>
 
-        <div class="form-floating">
-          <input v-model="loginRequest.password" type="password" class="form-control" id="password"
-                 placeholder="Parool" >
-          <label for="password">Parool</label>
-        </div>
+          <div class="form-floating">
+            <input
+                v-model="loginRequest.password"
+                type="password"
+                class="form-control"
+                placeholder="Parool"
+                required
+            >
+            <label>Parool</label>
+          </div>
 
-        <div class="d-grid gap-2">
-          <button @click="executeLogin" type="button" class="btn btn-secondary" :disabled="isFetchingData || !areRequiredFieldsFilled()">
-            <span v-if="isFetchingData" class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
-            Logi sisse
+          <div class="d-grid gap-2 mt-3">
+            <button
+                type="submit"
+                class="btn btn-secondary"
+                :disabled="isFetchingData || !areRequiredFieldsFilled()"
+            >
+              <span
+                  v-if="isFetchingData"
+                  class="spinner-border spinner-border-sm me-1"
+                  aria-hidden="true"
+              ></span>
+              Logi sisse
+            </button>
+          </div>
+        </form>
+
+        <div class="mt-2">
+          <button
+              @click="navigateToRegisterView"
+              type="button"
+              class="btn btn-link"
+          >
+            Registreeri
           </button>
         </div>
 
-        <div>
-          <button @click="navigateToRegisterView" type="button" class="btn btn-link">Registreeri</button>
-        </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
