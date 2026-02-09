@@ -5,6 +5,7 @@
 
         <AlertError
             :alert-error-message= 'alertErrorMessage'
+            @event-alert-box-closed='resetAlertMessages'
         />
 
         <div class="home">
@@ -93,6 +94,7 @@ export default {
       isPostingData: false,
       passwordRetype: '',
       alertErrorMessage: '',
+      alertSuccessMessage: '',
 
       userInfo: {
         username: '',
@@ -126,6 +128,11 @@ export default {
               /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
           );
     },
+
+    resetAlertMessages(){
+      this.alertErrorMessage = ''
+      this.alertSuccessMessage = ''
+    }
 
   },
 
