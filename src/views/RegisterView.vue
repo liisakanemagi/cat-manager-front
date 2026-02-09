@@ -4,9 +4,11 @@
       <div class="col-12 col-sm-8 col-md-6 col-lg-4 d-flex flex-column gap-2">
 
         <AlertError
-            :alert-error-message= 'alertErrorMessage'
+            :alert-error-message='alertErrorMessage'
             @event-alert-box-closed='resetAlertMessages'
         />
+        <AlertSuccess
+            :alert-success-message='alertSuccessMessage'/>
 
         <div class="home">
           <img
@@ -17,7 +19,7 @@
         </div>
 
         <form @submit.prevent="processRegister" novalidate>
-          <div class="form-floating">
+          <div v-if="displayAllFields" class="form-floating">
             <input
                 v-model="userInfo.username"
                 type="text"
@@ -85,16 +87,22 @@
 
 <script>
 import AlertError from "@/components/AlertError.vue";
+import RegisterService from "@/services/RegisterService";
+import AlertSuccess from "@/components/AlertSuccess.vue";
+import NavigationService from "@/services/NavigationService";
+import navigationService from "@/services/NavigationService";
+import {USERNAME_ALREADY_EXISTS} from "@/constants/ErrorCodes";
 
 export default {
   name: 'RegisterView',
-  components: {AlertError},
+  components: {AlertSuccess, AlertError},
   data() {
     return {
       isPostingData: false,
       passwordRetype: '',
       alertErrorMessage: '',
       alertSuccessMessage: '',
+      displayAllFields: true,
 
       userInfo: {
         username: '',
@@ -118,6 +126,36 @@ export default {
         this.alertErrorMessage = 'Sisestatud paroolid ei kattu'
       } else if (!this.isValidEmail(this.userInfo.email)) {
         this.alertErrorMessage = 'Palun sisesta korrektne e-mail'
+      } else {
+        this.executeRegister()
+      }
+    },
+
+    async executeRegister() {
+      this.isPostingData = true
+      try {
+        const response = await RegisterService.sendPostRegisterRequest(this.userInfo)
+        this.handleRegisterResponse()
+      } catch {
+        this.handleRegisterError(error)
+      } finally {
+        this.isPostingData = false
+      }
+
+    },
+
+    handleRegisterResponse() {
+      this.alertSuccessMessage = 'Uus kasutaja "' + this.userInfo.username + '" registreeritud!'
+      this.displayAllFields = false
+      setTimeout(NavigationService.navigateToHomeView, 4000)
+    },
+
+    handleRegisterError(error) {
+      this.errorResponse = error.response.data
+      if (error.response.status === 403 && this.errorResponse.errorCode === USERNAME_ALREADY_EXISTS) {
+        this.alertErrorMessage = this.errorResponse.message
+      } else {
+        navigationService.navigateToErrorView()
       }
     },
 
@@ -129,7 +167,7 @@ export default {
           );
     },
 
-    resetAlertMessages(){
+    resetAlertMessages() {
       this.alertErrorMessage = ''
       this.alertSuccessMessage = ''
     }
