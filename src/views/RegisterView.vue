@@ -47,10 +47,10 @@
                 v-model="userInfo.password"
                 type="password"
                 class="form-control"
-                placeholder="Parool"
+                placeholder="Parool (vähemalt 8 tähemärki, 1 number)"
                 required
             >
-            <label>Parool</label>
+            <label>Parool (vähemalt 8 tähemärki + number)</label>
           </div>
 
           <div class="form-floating">
@@ -123,6 +123,8 @@ export default {
     processRegister() {
       if (!this.isValidEmail(this.userInfo.email)) {
         this.displayEmailIsNotValidAlert();
+      } else if (!this.isValidPassword(this.userInfo.password)) {
+        this.displayPasswordNotValidAlert();
       } else if (!this.passwordsAreMatching()) {
         this.displayPasswordsNotMatchingAlert();
       } else {
@@ -135,11 +137,18 @@ export default {
     },
 
     isValidEmail(email) {
-      return String(email)
-          .toLowerCase()
-          .match(
-              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          );
+      const emailRegex =
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return emailRegex.test(String(email).toLowerCase());
+    },
+
+
+    isValidPassword(password) {
+      if (password.length < 8) {
+        return false;
+      }
+      const hasNumber = /\d/;
+      return hasNumber.test(password);
     },
 
     async executeRegister() {
@@ -183,13 +192,21 @@ export default {
       return this.userInfo.username !== '' && this.userInfo.password !== '' && this.userInfo.email !== '' && this.passwordRetype !== '';
     },
 
-    displayPasswordsNotMatchingAlert() {
-      this.alertErrorMessage = 'Sisestatud paroolid ei kattu'
-    },
+
 
     displayEmailIsNotValidAlert() {
       this.alertErrorMessage = 'Palun sisesta toimiv e-mail'
     },
+
+    displayPasswordNotValidAlert() {
+      this.alertErrorMessage = 'Parool peab olema vähemalt 8 tähemärki pikk ja sisaldama vähemalt ühte numbrit'
+    },
+
+    displayPasswordsNotMatchingAlert() {
+      this.alertErrorMessage = 'Sisestatud paroolid ei kattu'
+    },
+
+
 
   },
 
