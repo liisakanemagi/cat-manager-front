@@ -1,22 +1,23 @@
 <template>
 
-  <div v-if="alertErrorMessage !==''"
-       class="alert alert-danger alert-dismissible"
+  <div v-if="alertSuccessMessage !==''"
+       class="alert alert-success alert-dismissible"
        role="alert">
-    {{ alertErrorMessage }}
+    {{alertSuccessMessage}}
 
     <button @click="$emit('event-alert-box-closed')"
             type="button" class="btn-close"
             aria-label="Close"></button>
+
   </div>
 
 </template>
 
 <script>
 export default {
-  name: 'AlertError',
+  name: 'AlertSuccess',
   props: {
-    alertErrorMessage: String
+    alertSuccessMessage: String
   }
 }
 </script>
