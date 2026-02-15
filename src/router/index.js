@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import ErrorView from "@/views/ErrorView.vue";
 import RegisterView from "@/views/RegisterView.vue";
+import NewCatView from "@/views/NewCatView.vue";
 
 const routes = [
     {
@@ -27,7 +28,14 @@ const routes = [
         path: '/register',
         name: 'registerRoute',
         component: RegisterView
-    }
+    },
+
+    {
+        path: '/cat/new',
+        name: 'newCatRoute',
+        component: NewCatView
+    },
+
 
 ]
 
