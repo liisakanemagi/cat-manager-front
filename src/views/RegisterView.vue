@@ -29,6 +29,7 @@
                 class="form-control"
                 placeholder="Kasutajanimi"
                 required
+                maxlength="50"
             >
             <label>Kasutajanimi</label>
           </div>
@@ -40,6 +41,7 @@
                 class="form-control"
                 placeholder="Email"
                 required
+                maxlength="255"
             >
             <label>Email</label>
           </div>
@@ -51,6 +53,7 @@
                 class="form-control"
                 placeholder="Parool (vähemalt 8 tähemärki, 1 number)"
                 required
+                maxlength="120"
             >
             <label>Parool (vähemalt 8 tähemärki + number)</label>
           </div>
@@ -62,6 +65,7 @@
                 class="form-control"
                 placeholder="Korda parooli"
                 required
+                maxlength="120"
             >
             <label>Korda parooli</label>
           </div>
@@ -86,7 +90,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import AlertError from "@/components/AlertError.vue";
