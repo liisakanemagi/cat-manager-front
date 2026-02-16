@@ -39,6 +39,9 @@
             >
             <label>Kassi nimi</label>
           </div>
+
+          <CatStatusDropDown/>
+
         </div>
 
         <div class="col-12 col-md-4 d-flex flex-column gap-2">
@@ -65,10 +68,11 @@
 <script>
 import AlertError from "@/components/AlertError.vue";
 import AlertSuccess from "@/components/AlertSuccess.vue";
+import CatStatusDropDown from "@/components/CatStatusDropDown.vue";
 
 export default {
   name: 'NewCatView',
-  components: {AlertSuccess, AlertError},
+  components: {CatStatusDropDown, AlertSuccess, AlertError},
   data() {
     return {
 
