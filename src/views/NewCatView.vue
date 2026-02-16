@@ -37,13 +37,37 @@
                 required
                 maxlength="50"
             >
-            <label>Kassi nimi</label>
+            <label>Kassi nimi*</label>
           </div>
 
           <CatStatusDropDown
               :cat-statuses="catStatuses"
               @even-new-status-selected="setNewCatStatusId"
           />
+
+          <div class="form-floating">
+            <input
+                v-model="cat.arrivedAt"
+                type="date"
+                class="form-control"
+                placeholder="Saabumise aeg"
+            >
+            <label>Saabumise aeg</label>
+          </div>
+
+          <div class="form-floating">
+            <input
+                v-model="cat.weight"
+                type="number"
+                class="form-control"
+                placeholder="Kaal"
+                step="0.01"
+                min="0"
+                max="99.99"
+                @input="validateWeight"
+            >
+            <label>Kaal</label>
+          </div>
 
         </div>
 
@@ -117,6 +141,25 @@ export default {
   },
   methods: {
 
+    validateWeight(){
+      if (!this.cat.weight) return
+
+      let value = String(this.cat.weight)
+
+      if (value.includes('.')) {
+        const parts = value.split('.')
+        if (parts[0].length > 2) parts[0] = parts[0].slice(0, 2)
+
+        if (parts[1].length > 2) parts[1] = parts[1].slice(0, 2)
+
+        this.cat.weight = parts.join('.')
+      } else {
+        if (value.length > 2) {
+          this.cat.weight = value.slice(0, 2)
+        }
+      }
+    },
+
     setNewCatStatusId(selectedCatStatusId) {
       this.cat.statusId = selectedCatStatusId
     },
@@ -131,9 +174,7 @@ export default {
         const response = await CatStatusService.sendGetCatStatusesRequest()
         this.catStatuses = response.data
       } catch (error) {
-        console.log('Viga staatuste pärimisel:', error);
-        console.log('Vea detailid:', error.response);
-        // NavigationService.navigateToErrorView()
+        NavigationService.navigateToErrorView()
       }
     },
   },
