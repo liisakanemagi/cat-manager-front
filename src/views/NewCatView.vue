@@ -69,6 +69,10 @@
             <label>Kaal</label>
           </div>
 
+          <CatSexDropdown
+              @event-sex-selected="setCatSex"
+          />
+
         </div>
 
         <div class="col-12 col-md-4 d-flex flex-column gap-2">
@@ -98,10 +102,11 @@ import AlertSuccess from "@/components/AlertSuccess.vue";
 import CatStatusDropDown from "@/components/CatStatusDropDown.vue";
 import CatStatusService from "@/services/CatStatusService";
 import NavigationService from "@/services/NavigationService";
+import CatSexDropdown from "@/components/CatSexDropdown.vue";
 
 export default {
   name: 'NewCatView',
-  components: {CatStatusDropDown, AlertSuccess, AlertError},
+  components: {CatSexDropdown, CatStatusDropDown, AlertSuccess, AlertError},
   data() {
     return {
 
@@ -140,6 +145,11 @@ export default {
     }
   },
   methods: {
+
+    setCatSex(selectedSex) {
+      this.cat.sex = selectedSex
+    },
+
 
     validateWeight(){
       if (!this.cat.weight) return
