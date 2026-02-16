@@ -20,9 +20,9 @@
         <div class="col-12 col-md-4 d-flex align-items-center justify-content-center mb-3">
           <div class="home">
             <img
-              class="login-cat img-fluid"
-              src="@/assets/illustrations/cat4.jpeg"
-              alt="Cat illustration"
+                class="login-cat img-fluid"
+                src="@/assets/illustrations/cat4.jpeg"
+                alt="Cat illustration"
             >
           </div>
         </div>
@@ -40,7 +40,10 @@
             <label>Kassi nimi</label>
           </div>
 
-          <CatStatusDropDown/>
+          <CatStatusDropDown
+              :cat-statuses="catStatuses"
+              @even-new-status-selected="setNewCatStatusId"
+          />
 
         </div>
 
@@ -69,6 +72,8 @@
 import AlertError from "@/components/AlertError.vue";
 import AlertSuccess from "@/components/AlertSuccess.vue";
 import CatStatusDropDown from "@/components/CatStatusDropDown.vue";
+import CatStatusService from "@/services/CatStatusService";
+import NavigationService from "@/services/NavigationService";
 
 export default {
   name: 'NewCatView',
@@ -76,7 +81,7 @@ export default {
   data() {
     return {
 
-      userId: Number(sessionStorage.getItem('usedId')),
+      userId: Number(sessionStorage.getItem('userId')),
       isPostingData: false,
       displayAllFields: true,
       alertErrorMessage: '',
@@ -112,13 +117,31 @@ export default {
   },
   methods: {
 
+    setNewCatStatusId(selectedCatStatusId) {
+      this.cat.statusId = selectedCatStatusId
+    },
+
     resetAlertMessages() {
       this.alertErrorMessage = ''
       this.alertSuccessMessage = ''
     },
 
+    async getCatStatuses() {
+      try {
+        const response = await CatStatusService.sendGetCatStatusesRequest()
+        this.catStatuses = response.data
+      } catch (error) {
+        console.log('Viga staatuste pärimisel:', error);
+        console.log('Vea detailid:', error.response);
+        // NavigationService.navigateToErrorView()
+      }
+    },
   },
+
+
   mounted() {
+
+    this.getCatStatuses()
   }
 }
 </script>

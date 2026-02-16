@@ -1,5 +1,5 @@
 <template>
-  <select @change="selectNewCatStatus($event.target.value)" :value= "selectedCatStatus" class="form-select">
+  <select @change="selectNewCatStatus($event.target.value)" :value= "selectedCatStatusId" class="form-select">
     <option selected :value="0">Kassi staatus </option>
     <option v-for="catStatus in catStatuses" :key="catStatus.id" :value="catStatus.id">{{catStatus.label}}</option>
   </select>
@@ -11,7 +11,7 @@ export default {
   props: {
 
     catStatuses: Array,
-    selectedCatStatus: {
+    selectedCatStatusId: {
       type: Number,
       default: 0
 
