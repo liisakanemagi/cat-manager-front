@@ -92,9 +92,9 @@
 </template>
 
 <script>
-import AlertError from "@/components/AlertError.vue";
+import AlertError from "@/components/Alert/AlertError.vue";
 import RegisterService from "@/services/RegisterService";
-import AlertSuccess from "@/components/AlertSuccess.vue";
+import AlertSuccess from "@/components/Alert/AlertSuccess.vue";
 import NavigationService from "@/services/NavigationService";
 import navigationService from "@/services/NavigationService";
 import {EMAIL_ALREADY_EXISTS, USERNAME_ALREADY_EXISTS} from "@/constants/ErrorCodes";

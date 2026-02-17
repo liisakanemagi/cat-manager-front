@@ -79,30 +79,51 @@
                 type="text"
                 class="form-control"
                 placeholder="Kiibinumber - 15 numbrit"
-                required
                 maxlength="15"
                 minlength="15"
-                @input ="validateChipNumber"
+                @input="validateChipNumber"
             >
             <label>Kiibinumber - 15 numbrit</label>
           </div>
         </div>
 
         <div class="col-12 col-md-4 d-flex flex-column gap-2">
-          <div class="d-grid gap-2 mt-3">
 
-            <div class="form-floating">
-              <input
-                  v-model="cat.name"
-                  type="text"
+          <div class="form-floating">
+              <textarea
+                  v-model="cat.healthInfo"
                   class="form-control"
-                  placeholder="Kassinimi"
-                  required
-                  maxlength="50"
-              >
-              <label>Kassi nimi*</label>
-            </div>
+                  placeholder="Terviseinfo"
+                  maxlength="500"
+                  style="height: 100px"
+              ></textarea>
+            <label>Terviseinfo</label>
+          </div>
 
+          <div class="form-floating">
+              <textarea
+                  v-model="cat.healthInfo"
+                  class="form-control"
+                  placeholder="Muu info"
+                  maxlength="500"
+                  style="height: 100px"
+              ></textarea>
+            <label>Muu info</label>
+          </div>
+
+          <ImageInput
+              ref="Image Input"
+              @event-new-image-selected="handleImageSelected"
+              @event-chosen-image-cleared="clearImage"
+          />
+          
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="d-grid gap-2 mt-3">
+
+          <div class="col-12">
             <button
                 type="submit"
                 class="btn btn-secondary"
@@ -116,23 +137,26 @@
               Lisa
             </button>
           </div>
+
         </div>
       </div>
+
     </form>
   </div>
 </template>
 
 <script>
-import AlertError from "@/components/AlertError.vue";
-import AlertSuccess from "@/components/AlertSuccess.vue";
-import CatStatusDropDown from "@/components/CatStatusDropDown.vue";
+import AlertError from "@/components/Alert/AlertError.vue";
+import AlertSuccess from "@/components/Alert/AlertSuccess.vue";
+import CatStatusDropDown from "@/components/Cat/CatStatusDropDown.vue";
 import CatStatusService from "@/services/CatStatusService";
 import NavigationService from "@/services/NavigationService";
-import CatSexDropdown from "@/components/CatSexDropdown.vue";
+import CatSexDropdown from "@/components/Cat/CatSexDropdown.vue";
+import ImageInput from "@/components/Image/ImageInput.vue";
 
 export default {
   name: 'NewCatView',
-  components: {CatSexDropdown, CatStatusDropDown, AlertSuccess, AlertError},
+  components: {ImageInput, CatSexDropdown, CatStatusDropDown, AlertSuccess, AlertError},
   data() {
     return {
 
@@ -172,12 +196,20 @@ export default {
   },
   methods: {
 
+    handleImageSelected(imageData) {
+      this.cat.imageData = imageData
+    },
+
+    clearImage() {
+      this.cat.imageData = ''
+    },
+
     setCatSex(selectedSex) {
       this.cat.sex = selectedSex
     },
 
 
-    validateWeight(){
+    validateWeight() {
       if (!this.cat.weight) return
 
       let value = String(this.cat.weight)
@@ -196,8 +228,8 @@ export default {
       }
     },
 
-    validateChipNumber(){
-      if(this.cat.chipNumber){
+    validateChipNumber() {
+      if (this.cat.chipNumber) {
         this.cat.chipNumber = this.cat.chipNumber.replace(/[^0-9]/g, '')
       }
 

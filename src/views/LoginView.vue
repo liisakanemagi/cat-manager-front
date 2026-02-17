@@ -72,7 +72,7 @@
 
 <script>
 import LoginService from "@/services/LoginService";
-import AlertError from "@/components/AlertError.vue";
+import AlertError from "@/components/Alert/AlertError.vue";
 import NavigationService from "@/services/NavigationService";
 import {INVALID_CREDENTIALS_ERROR} from "@/constants/ErrorCodes";
 
