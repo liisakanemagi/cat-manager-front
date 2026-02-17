@@ -27,7 +27,7 @@
           </div>
         </div>
 
-        <div class="col-12 col-md-2 d-flex flex-column gap-2">
+        <div class="col-12 col-md-3 d-flex flex-column gap-2">
           <div class="form-floating">
             <input
                 v-model="cat.name"
@@ -73,10 +73,36 @@
               @event-sex-selected="setCatSex"
           />
 
+          <div class="form-floating">
+            <input
+                v-model="cat.chipNumber"
+                type="text"
+                class="form-control"
+                placeholder="Kiibinumber - 15 numbrit"
+                required
+                maxlength="15"
+                minlength="15"
+                @input ="validateChipNumber"
+            >
+            <label>Kiibinumber - 15 numbrit</label>
+          </div>
         </div>
 
         <div class="col-12 col-md-4 d-flex flex-column gap-2">
           <div class="d-grid gap-2 mt-3">
+
+            <div class="form-floating">
+              <input
+                  v-model="cat.name"
+                  type="text"
+                  class="form-control"
+                  placeholder="Kassinimi"
+                  required
+                  maxlength="50"
+              >
+              <label>Kassi nimi*</label>
+            </div>
+
             <button
                 type="submit"
                 class="btn btn-secondary"
@@ -168,6 +194,13 @@ export default {
           this.cat.weight = value.slice(0, 2)
         }
       }
+    },
+
+    validateChipNumber(){
+      if(this.cat.chipNumber){
+        this.cat.chipNumber = this.cat.chipNumber.replace(/[^0-9]/g, '')
+      }
+
     },
 
     setNewCatStatusId(selectedCatStatusId) {
