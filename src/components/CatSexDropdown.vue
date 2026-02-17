@@ -1,8 +1,8 @@
 <template>
   <select v-model="selectedSex" class="form-select">
-    <option :value ="null">Sugu</option>
-    <option :value="M">Isane</option>
-    <option :value="F">Emane</option>
+    <option :value ="null" disabled>Sugu</option>
+    <option value="M">Isane</option>
+    <option value="F">Emane</option>
   </select>
 </template>
 
