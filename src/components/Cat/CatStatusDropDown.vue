@@ -8,6 +8,7 @@
 <script>
 export default {
   name: 'CatStatusDropDown',
+  emits: ['event-new-status-selected'],
   props: {
 
     catStatuses: Array,

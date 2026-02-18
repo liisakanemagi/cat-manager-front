@@ -15,6 +15,7 @@
 <script>
 export default {
   name: 'AlertError',
+  emits: ['event-alert-box-closed'],
   props: {
     alertErrorMessage: String
   }

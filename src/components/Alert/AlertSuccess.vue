@@ -16,6 +16,7 @@
 <script>
 export default {
   name: 'AlertSuccess',
+  emits: ['event-alert-box-closed'],
   props: {
     alertSuccessMessage: String
   }
