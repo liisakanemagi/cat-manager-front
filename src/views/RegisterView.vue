@@ -166,7 +166,6 @@ export default {
       } finally {
         this.isPostingData = false
       }
-
     },
 
     handleRegisterResponse() {
@@ -177,21 +176,21 @@ export default {
 
     handleRegisterError(error) {
       this.errorResponse = error.response.data
-      if (this.userAlreadyExists(error)) {
+      if (this.userAlreadyExists()){
         this.alertErrorMessage = this.errorResponse.message
-      } else if(this.emailAlreadyExists(error)) {
+      } else if (this.emailAlreadyExists()) {
         this.alertErrorMessage = this.errorResponse.message
       } else {
-        navigationService.navigateToErrorView()
+        navigationService.navigateToErrorView();
       }
     },
 
-    userAlreadyExists(error) {
-      return error.response.status === 403 && this.errorResponse.errorCode === USERNAME_ALREADY_EXISTS
+    userAlreadyExists() {
+      return this.errorResponse.errorCode === USERNAME_ALREADY_EXISTS
     },
 
-    emailAlreadyExists(error) {
-      return error.response.status === 403 && this.errorResponse.errorCode === EMAIL_ALREADY_EXISTS
+    emailAlreadyExists() {
+      return this.errorResponse.errorCode === EMAIL_ALREADY_EXISTS
     },
 
     resetAlertMessages() {
