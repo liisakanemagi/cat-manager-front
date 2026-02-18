@@ -22,7 +22,8 @@
 
       <button v-if="selectedFileName"
               class="btn btn-outline-danger"
-              type="button" @click="clearFileInput">
+              type="button"
+              @click="clearFileInput">
         <font-awesome-icon icon="fa-solid fa-trash" />
       </button>
     </div>

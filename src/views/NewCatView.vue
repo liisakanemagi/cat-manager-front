@@ -140,7 +140,6 @@
 
         </div>
       </div>
-
     </form>
   </div>
 </template>
@@ -196,18 +195,18 @@ export default {
   },
   methods: {
 
-    handleImageSelected(imageData) {
-      this.cat.imageData = imageData
+    async getCatStatuses() {
+      try {
+        const response = await CatStatusService.sendGetCatStatusesRequest()
+        this.catStatuses = response.data
+      } catch (error) {
+        NavigationService.navigateToErrorView()
+      }
     },
 
-    clearImage() {
-      this.cat.imageData = ''
+    setNewCatStatusId(selectedCatStatusId) {
+      this.cat.statusId = selectedCatStatusId
     },
-
-    setCatSex(selectedSex) {
-      this.cat.sex = selectedSex
-    },
-
 
     validateWeight() {
       if (!this.cat.weight) return
@@ -228,6 +227,10 @@ export default {
       }
     },
 
+    setCatSex(selectedSex) {
+      this.cat.sex = selectedSex
+    },
+
     validateChipNumber() {
       if (this.cat.chipNumber) {
         this.cat.chipNumber = this.cat.chipNumber.replace(/[^0-9]/g, '')
@@ -235,23 +238,20 @@ export default {
 
     },
 
-    setNewCatStatusId(selectedCatStatusId) {
-      this.cat.statusId = selectedCatStatusId
+    handleImageSelected(imageData) {
+      this.cat.imageData = imageData
     },
+
+    clearImage() {
+      this.cat.imageData = ''
+    },
+
 
     resetAlertMessages() {
       this.alertErrorMessage = ''
       this.alertSuccessMessage = ''
     },
 
-    async getCatStatuses() {
-      try {
-        const response = await CatStatusService.sendGetCatStatusesRequest()
-        this.catStatuses = response.data
-      } catch (error) {
-        NavigationService.navigateToErrorView()
-      }
-    },
   },
 
 
