@@ -239,8 +239,13 @@ export default {
       }
     },
 
-    handleAddCatResponse() {
+     handleAddCatResponse() {
       this.alertSuccessMessage = 'Uus kass lisatud'
+      this.clearInputForm();
+      setTimeout(this.resetAlertMessages, 4000)
+    },
+
+    clearInputForm() {
       Object.assign(this.cat, this.$options.data().cat)
       this.componentKey += 1
       this.$refs['Image Input'].clearFileInput()
