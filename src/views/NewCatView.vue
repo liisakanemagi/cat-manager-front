@@ -240,7 +240,7 @@ export default {
     },
 
      handleAddCatResponse() {
-      this.alertSuccessMessage = 'Uus kass lisatud'
+      this.alertSuccessMessage = 'Uus kass ' + this.cat.name + ' lisatud!'
       this.clearInputForm();
       setTimeout(this.resetAlertMessages, 4000)
     },
