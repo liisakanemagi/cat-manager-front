@@ -1,7 +1,7 @@
 <template>
   <div class="container text-center">
     <div class="row justify-content-center">
-      <div class="col-12">
+      <div class="col-12 col-md-3">
 
         <AlertError
             :alert-error-message='alertErrorMessage'
@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <form v-if="displayAllFields" @submit.prevent novalidate>
+    <form v-if="displayAllFields" @submit.prevent="processAddCat" novalidate>
       <div class="row">
         <div class="col-12 col-md-4 d-flex align-items-center justify-content-center mb-3">
           <div class="home">
@@ -42,7 +42,11 @@
 
           <CatStatusDropDown
               :cat-statuses="catStatuses"
-              @even-new-status-selected="setNewCatStatusId"
+              @event-new-status-selected="setNewCatStatusId"
+          />
+
+          <CatSexDropdown
+              @event-sex-selected="setCatSex"
           />
 
           <div class="form-floating">
@@ -53,6 +57,16 @@
                 placeholder="Saabumise aeg"
             >
             <label>Saabumise aeg</label>
+          </div>
+
+          <div class="form-floating">
+            <input
+                v-model="cat.birthday"
+                type="date"
+                class="form-control"
+                placeholder="Sünnipäev"
+            >
+            <label>Sünnipäev</label>
           </div>
 
           <div class="form-floating">
@@ -69,10 +83,9 @@
             <label>Kaal</label>
           </div>
 
-          <CatSexDropdown
-              @event-sex-selected="setCatSex"
-          />
+        </div>
 
+        <div class="col-12 col-md-4 d-flex flex-column gap-2">
           <div class="form-floating">
             <input
                 v-model="cat.chipNumber"
@@ -85,9 +98,6 @@
             >
             <label>Kiibinumber - 15 numbrit</label>
           </div>
-        </div>
-
-        <div class="col-12 col-md-4 d-flex flex-column gap-2">
 
           <div class="form-floating">
               <textarea
@@ -95,18 +105,18 @@
                   class="form-control"
                   placeholder="Terviseinfo"
                   maxlength="500"
-                  style="height: 100px"
+                  style="height: 112px"
               ></textarea>
             <label>Terviseinfo</label>
           </div>
 
           <div class="form-floating">
               <textarea
-                  v-model="cat.healthInfo"
+                  v-model="cat.otherInfo"
                   class="form-control"
                   placeholder="Muu info"
                   maxlength="500"
-                  style="height: 100px"
+                  style="height: 112px"
               ></textarea>
             <label>Muu info</label>
           </div>
@@ -116,7 +126,7 @@
               @event-new-image-selected="handleImageSelected"
               @event-chosen-image-cleared="clearImage"
           />
-          
+
         </div>
       </div>
 
@@ -150,8 +160,11 @@ import AlertSuccess from "@/components/Alert/AlertSuccess.vue";
 import CatStatusDropDown from "@/components/Cat/CatStatusDropDown.vue";
 import CatStatusService from "@/services/CatStatusService";
 import NavigationService from "@/services/NavigationService";
+import navigationService from "@/services/NavigationService";
 import CatSexDropdown from "@/components/Cat/CatSexDropdown.vue";
 import ImageInput from "@/components/Image/ImageInput.vue";
+import CatService from "@/services/CatService";
+import {CAT_AlREADY_EXISTS} from "@/constants/ErrorCodes";
 
 export default {
   name: 'NewCatView',
@@ -168,10 +181,10 @@ export default {
       cat: {
         name: '',
         statusId: 0,
+        sex: '',
         arrivedAt: '',
         birthday: '',
         weight: 0,
-        sex: '',
         chipNumber: '',
         healthInfo: '',
         otherInfo: '',
@@ -194,6 +207,52 @@ export default {
     }
   },
   methods: {
+
+    processAddCat() {
+      this.resetAlertMessages()
+      if (this.requiredFieldsHaveInput()) {
+        this.executeAddCat();
+      }
+    },
+
+    requiredFieldsHaveInput() {
+      if (this.cat.name === '' || this.cat.statusId === null
+          || this.cat.sex === '') {
+        this.alertErrorMessage = 'Täida kõik nõutud väljad'
+        return false
+      }
+      return true
+    },
+
+    async executeAddCat() {
+      this.isPostingData = true
+      try {
+        await CatService.sendPostCatRequest(this.cat);
+        this.handleAddCatResponse()
+      } catch(error) {
+        this.handleAddCatError(error)
+      } finally {
+        this.isPostingData = false
+      }
+    },
+
+    handleAddCatResponse() {
+      this.alertSuccessMessage = 'Uus kass lisatud'
+      this.displayAllFields = false
+    },
+
+    handleAddCatError(error) {
+      this.errorResponse = error.response.data
+      if (this.catAlreadyExists()){
+        this.alertErrorMessage = this.errorResponse.message
+      } else {
+        navigationService.navigateToErrorView()
+      }
+    },
+
+    catAlreadyExists() {
+      return this.errorResponse.errorCode === CAT_AlREADY_EXISTS
+    },
 
     async getCatStatuses() {
       try {
@@ -235,7 +294,6 @@ export default {
       if (this.cat.chipNumber) {
         this.cat.chipNumber = this.cat.chipNumber.replace(/[^0-9]/g, '')
       }
-
     },
 
     handleImageSelected(imageData) {
@@ -254,9 +312,7 @@ export default {
 
   },
 
-
   mounted() {
-
     this.getCatStatuses()
   }
 }
