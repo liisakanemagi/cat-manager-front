@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <form v-if="displayAllFields" @submit.prevent="processAddCat" novalidate>
+    <form @submit.prevent="processAddCat" novalidate>
       <div class="row">
         <div class="col-12 col-md-4 d-flex align-items-center justify-content-center mb-3">
           <div class="home">
@@ -41,11 +41,13 @@
           </div>
 
           <CatStatusDropDown
+              :key="componentKey"
               :cat-statuses="catStatuses"
               @event-new-status-selected="setNewCatStatusId"
           />
 
           <CatSexDropdown
+              :key="componentKey"
               @event-sex-selected="setCatSex"
           />
 
@@ -123,6 +125,7 @@
 
           <ImageInput
               ref="Image Input"
+              :key="componentKey"
               @event-new-image-selected="handleImageSelected"
               @event-chosen-image-cleared="clearImage"
           />
@@ -173,8 +176,8 @@ export default {
     return {
 
       userId: Number(sessionStorage.getItem('userId')),
+      componentKey: 0,
       isPostingData: false,
-      displayAllFields: true,
       alertErrorMessage: '',
       alertSuccessMessage: '',
 
@@ -238,7 +241,9 @@ export default {
 
     handleAddCatResponse() {
       this.alertSuccessMessage = 'Uus kass lisatud'
-      this.displayAllFields = false
+      Object.assign(this.cat, this.$options.data().cat)
+      this.componentKey += 1
+      this.$refs['Image Input'].clearFileInput()
     },
 
     handleAddCatError(error) {
