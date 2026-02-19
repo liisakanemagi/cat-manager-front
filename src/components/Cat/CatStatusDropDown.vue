@@ -20,8 +20,9 @@ export default {
   },
 
   methods: {
-    selectNewCatStatus(selectedCatStatus){
-      this.$emit('event-new-status-selected', Number(selectedCatStatus))
+    selectNewCatStatus(selectedCatStatusId){
+      console.log('selectNewCatStatus called with:', selectedCatStatusId);
+      this.$emit('event-new-status-selected', Number(selectedCatStatusId))
     }
   }
 }
