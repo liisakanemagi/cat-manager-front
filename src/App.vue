@@ -1,6 +1,6 @@
 <template>
   <nav class="d-flex gap-2 justify-content-center">
-    <router-link to="/">Home</router-link>
+    <router-link to="/">Avaleht</router-link>
     <router-link to="/cat/new" v-if="isLoggedIn">Lisa kiisu</router-link>
 
     <button v-if="isLoggedIn" @click="logOut" type="button" class="btn btn-secondary btn-sm ms-3">
