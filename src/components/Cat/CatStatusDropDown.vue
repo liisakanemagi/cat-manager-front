@@ -21,7 +21,6 @@ export default {
 
   methods: {
     selectNewCatStatus(selectedCatStatusId){
-      console.log('selectNewCatStatus called with:', selectedCatStatusId);
       this.$emit('event-new-status-selected', Number(selectedCatStatusId))
     }
   }
