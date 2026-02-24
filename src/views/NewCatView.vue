@@ -175,7 +175,6 @@ export default {
   data() {
     return {
 
-      userId: Number(sessionStorage.getItem('userId')),
       componentKey: 0,
       isPostingData: false,
       alertErrorMessage: '',
