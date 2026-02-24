@@ -18,6 +18,7 @@ This project is the frontend application for the Cat Manager system, providing a
 ### In Development
 *   **View Cat Data:** Pages for viewing personal cat data and lists.
 *   **Add and Keep Track of Procedures:** Functionality to add and track cat health and activity procedures.
+*   **Style:** More personalized style REA
 
 ## Setup & Installation
 
