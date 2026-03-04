@@ -21,7 +21,7 @@ export default {
         })
     },
 
-    sendGetCatRequest(){
+    sendGetCatRequest(catId){
         let token = sessionStorage.getItem('token');
         return axios.get('/cat',
             {
