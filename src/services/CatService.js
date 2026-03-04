@@ -19,6 +19,15 @@ export default {
                 Authorization: 'Bearer ' + token
             }
         })
+    },
 
+    sendGetCatRequest(){
+        let token = sessionStorage.getItem('token');
+        return axios.get('/cat',
+            {
+                headers:{
+                    Authorization: 'Bearer' + token
+                }
+            })
     }
 }
