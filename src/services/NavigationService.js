@@ -17,6 +17,10 @@ export default {
 
     navigateToRegisterView() {
         router.push(({name:'registerRoute'}))
+    },
+
+    navigateToCatView(selectedCatId) {
+        router.push(({name:'catRoute'}))
     }
 
 }
