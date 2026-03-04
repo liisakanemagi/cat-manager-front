@@ -66,6 +66,9 @@ export default {
     updateNavMenu() {
       this.isLoggedIn = SessionStorageService.isLoggedIn()
       this.isAdmin = SessionStorageService.isAdmin()
+      if (this.isLoggedIn) {
+        this.getCats()
+      }
     },
 
     navigateToLoginView() {
@@ -88,7 +91,6 @@ export default {
 
   mounted() {
     this.updateNavMenu()
-    this.getCats()
   }
 }
 </script>
