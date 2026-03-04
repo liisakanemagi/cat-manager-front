@@ -6,7 +6,7 @@
         v-if="isLoggedIn"
         :cats="cats"
         :selected-cat-id="cats.id"
-        @event-new-cat-selected="setNewCatId"
+        @event-new-cat-selected="navigateToCatView"
     />
 
     <router-link to="/cat/new" v-if="isLoggedIn">Lisa kass</router-link>
@@ -84,8 +84,9 @@ export default {
       }
     },
 
-    setNewCatId(selectedCatId) {
+    navigateToCatView(selectedCatId) {
       this.cats.id = selectedCatId
+      navigationService.navigateToCatView(selectedCatId)
     },
   },
 
